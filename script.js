@@ -1,3 +1,34 @@
+const textElement = document.getElementById('text');
+const optionButtonsElement = document.getElementById('option-buttonns');
+
+let state = {};
+function startGame(){
+  state = {};
+  showTextNode(i);
+};
+function showTextNode(textNodeIndex){
+
+};
+function selectOption(option){
+
+};
+
+const textNodes = [
+  {
+    id; 1,
+    text: "You're walking and then you see something on the horizon",
+    options: [
+      {
+        text: "Run away",
+      },
+      {
+        text: "Draw weapon",
+      }
+    ]
+  }
+]
+
+startGame();
 //All object constructors go here
 function Character(name, weaponType, attack, defense, healthPoints){
 this.name = name;
