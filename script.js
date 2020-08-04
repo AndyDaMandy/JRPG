@@ -1,28 +1,88 @@
 const textElement = document.getElementById('text');
-const optionButtonsElement = document.getElementById('option-buttonns');
+const optionButtonsElement = document.getElementById('option-buttons');
 
 let state = {};
 function startGame(){
   state = {};
-  showTextNode(i);
+  showTextNode(1);
 };
 function showTextNode(textNodeIndex){
-
+const textNode = textNodes.find(textNode => textNode.id === textNodeIndex);
+textElement.innerText = textNode.text;
+// from what I understand, this hides the options
+while (optionButtonsElement.firstChild){
+  optionButtonsElement.removeChild(optionButtonsElement.firstChild)
+}
+textNode.options.forEach(option => {
+  if (showOption(option)){
+    const button = document.createElement('button')
+    button.innerText = option.text
+    button.classList.add('btn')
+    button.addEventListener('click', () => selectOption(option))
+    optionButtonsElement.appendChild(button)
+  }
+})
 };
-function selectOption(option){
 
+function showOption(option){
+  return option.requiredState == null || option.requiredState(state)
+}
+
+function selectOption(option){
+const nextTextNodeId = option.nextText
+if (nextTextNodeId <= 0){
+  return startGame()
+}
+//rewatch the video to see why this works the way it does.
+state = Object.assign(state, option.setState)
+showTextNode(nextTextNodeId)
 };
 
 const textNodes = [
   {
-    id; 1,
+    id: 1,
     text: "You're walking and then you see something on the horizon",
     options: [
       {
         text: "Run away",
+        setState: {runAway: true},
+        nextText: 2
       },
       {
-        text: "Draw weapon",
+        text: "Draw sword",
+        nextText: 2
+      }
+    ]
+  },
+  {
+    id: 2,
+    text: "While running you remember you aren't wearing shoes",
+    options: [
+      {
+        text: "Equip boots of speed",
+        requiredState: (currentState) => currentState.runAway,
+        setState: {sword: false, speedBoots: true},
+        nextText: 3
+      },
+      {
+        text: "Grab a sword instead!",
+        requiredState: (currentState) => currentState.runAway,
+        setState: {sword: true, speedBoots: false},
+        nextText: 3
+      },
+      {
+        text: "Stop running!",
+        nextText: 3
+      }
+    ]
+  },
+  {
+    id: 3,
+    text: "You realize that you're in a game!!!!",
+    options: [
+      {
+        text: "restart!",
+        nextText: -1
       }
     ]
   }
